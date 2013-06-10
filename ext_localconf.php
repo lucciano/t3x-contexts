@@ -3,6 +3,9 @@ if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
 
+$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields']
+    .= ',tx_contexts_enable,tx_contexts_disable';
+
 //hook into record saving
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['contexts']
     = 'EXT:contexts/Classes/Service/Tcemain.php:'
@@ -34,6 +37,10 @@ $TYPO3_CONF_VARS['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser']['contex
     = 'EXT:contexts/Classes/Service/Tsfe.php:'
     . '&Tx_Contexts_Service_Tsfe->initFEuser';
 $TYPO3_CONF_VARS['SC_OPTIONS']['typo3/mod/tools/em/index.php']['checkDBupdates']['contexts'] = 'EXT:contexts/Classes/Service/Install.php:Tx_Contexts_Service_Install';
+
+$TYPO3_CONF_VARS['SC_OPTIONS']['tslib/class.tslib_fe.php']['hook_checkEnableFields']['contexts']
+    = 'EXT:contexts/Classes/Service/Tsfe.php:'
+    . '&Tx_Contexts_Service_Tsfe->checkEnableFields';
 
 if (TYPO3_MODE != 'BE') {
     //we load that file in ext_tables.php for the backend
