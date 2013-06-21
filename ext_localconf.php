@@ -1,7 +1,9 @@
 <?php
 if (!defined('TYPO3_MODE')) {
-	die('Access denied.');
+    die('Access denied.');
 }
+
+$strContextsPath = t3lib_extMgm::extPath($_EXTKEY);
 
 $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields']
     .= ',tx_contexts_enable,tx_contexts_disable';
@@ -38,9 +40,21 @@ $TYPO3_CONF_VARS['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser']['contex
     . '&Tx_Contexts_Service_Tsfe->initFEuser';
 $TYPO3_CONF_VARS['SC_OPTIONS']['typo3/mod/tools/em/index.php']['checkDBupdates']['contexts'] = 'EXT:contexts/Classes/Service/Install.php:Tx_Contexts_Service_Install';
 
-$TYPO3_CONF_VARS['SC_OPTIONS']['tslib/class.tslib_fe.php']['hook_checkEnableFields']['contexts']
-    = 'EXT:contexts/Classes/Service/Tsfe.php:'
-    . '&Tx_Contexts_Service_Tsfe->checkEnableFields';
+if (isset($TYPO3_CONF_VARS['SYS']['compat_version'])
+    && t3lib_div::int_from_ver($TYPO3_CONF_VARS['SYS']['compat_version']) >= 6002000
+) {
+    // add some hooks
+    $TYPO3_CONF_VARS['SC_OPTIONS']['tslib/class.tslib_fe.php']['hook_checkEnableFields']['contexts']
+        = 'EXT:contexts/Classes/Service/Tsfe.php:'
+        . '&Tx_Contexts_Service_Tsfe->checkEnableFields';
+
+} else {
+    // XCLASS subclassing override class.tslib_fe
+    $TYPO3_CONF_VARS['FE']['XCLASS']['tslib/class.tslib_fe.php']
+        = $strContextsPath . 'class.ux_tslib_fe.php';
+}
+
+
 
 if (TYPO3_MODE != 'BE') {
     //we load that file in ext_tables.php for the backend
