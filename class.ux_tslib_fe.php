@@ -31,7 +31,7 @@ class ux_tslib_fe extends tslib_fe
 {
     /**
     * (non-PHPdoc)
-    * @see \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController::checkEnableFields($row, $bypassGroupCheck)
+    * @see tslib_fe::checkEnableFields($row, $bypassGroupCheck)
     */
     public function checkEnableFields($row,$bypassGroupCheck=FALSE)
     {
