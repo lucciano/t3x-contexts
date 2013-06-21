@@ -17,15 +17,17 @@ class Tx_Contexts_Service_Tsfe
      * Check subpages for context from rootline
      * method is called from hook "hook_checkEnableFields"
      *
-     * @param array $pObj key: pObj value: TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+     * @param array $arData key: pObj value: TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController (required)
+     *                      key: row  value: page record to evaluate
+     *                      key: bypassGroupCheck  value: boolean
      *
      * @return boolean false if context from root not match
      */
-    public function checkEnableFields($pObj)
+    public function checkEnableFields($arData)
     {
         $contexts = Tx_Contexts_Context_Container::get();
         $bFindExtendSubPage = 0;
-        foreach (array_reverse($pObj['pObj']->rootLine) as $page) {
+        foreach (array_reverse($arData['pObj']->rootLine) as $page) {
             //check extendtosubpages
             if ($page['extendToSubpages'] == '0' && $bFindExtendSubPage == 0) {
                 continue;
